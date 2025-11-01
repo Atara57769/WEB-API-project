@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="home.js" defer></script>
+    <title></title>
+    <style>
+        .connect {
+            display: flex;
+            gap: 25px;
+        }
+
+        .newUser {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            margin-right:20px
+        }
+
+        .existUser {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items:center;
+            gap: 7px;
+        }
+    </style>
+</head>
+<body>
+    <div class="connect">
+        <div class="newUser">
+            <h1>New User</h1>
+            <label for="email">Email</label>
+            <input type="email" id="email" />
+            <label for="firatName">First Name</label>
+            <input type="text" id="firstName" />
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" />
+            <label for="password">Enter your password</label>
+            <input type="password" id="password" />
+
+            <!--<button onclick="getResponse()">get</button>-->
+            <button onclick="addUser()">send</button>
+            <u onclick="displyExistUser()">Login</u>
+        </div>
+
+        <div class="existUser">
+            <h1>Login</h1>
+            <label for="emailLogin">Email</label>
+            <input type="email" id="emailLogin" />
+            <label for="passwordLogin">Enter your password</label>
+            <input type="password" id="passwordLogin" />
+            <button onclick="Login()">send</button>
+        </div>
+    </div>
+</body>
+</html>

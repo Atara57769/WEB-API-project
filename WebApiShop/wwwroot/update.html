@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="update.js" defer></script>
+    <title></title>
+    <style >
+        .welcomText{
+            text-align:center
+        }
+        .updateUser {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="welcomText"></h1>
+    <div class="updateUser">
+        <h1>Update User</h1>
+        <label for="email">Email</label>
+        <input type="email" id="email" />
+        <label for="firatName">First Name</label>
+        <input type="text" id="firstName" />
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" />
+        <label for="password">Enter your password</label>
+        <input type="password" id="password" />
+        <button onclick="updateUser()">update</button>
+    </div>
+</body>
+</html>
