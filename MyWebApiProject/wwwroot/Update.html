@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        body {
+            background-color: gray;
+            display: flex;
+            justify-content: center;
+        }
+        .main {
+            background-color:white;
+            width:30vw;
+            height:auto;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+            gap: 10px;
+        }
+        #updateForm {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+         <p>✅✅✅</p>
+       
+         <h3>התחברת בהצלחה</h3>
+         <a href="#" id="update">לעדכון פרטים</a>
+         <div id="updateForm">
+             <label for="username">username:</label>
+             <input type="text" id="username" name="username" required />
+             <label for="password">password:</label>
+             <input type="password" id="password" name="password" required />
+             <label for="firstname">firstname:</label>
+             <input type="text" id="firstname" name="firstname" required />
+             <label for="lastname">lastname:</label>
+             <input type="text" id="lastname" name="lastname" required />
+             <button type="submit" id="submit">update</button>
+         </div>
+        
+    </div>
+</body>
+</html>
+<script>
+    document.getElementById('update').addEventListener('click',()=>{
+        document.getElementById('updateForm').style.display = 'flex'
+    })
+    const submit = document.getElementById('submit')
+    submit.addEventListener('click', Update)
+    async function Update() {
+        const userName = document.getElementById('username').value
+        const password = document.getElementById('password').value
+        const firstName = document.getElementById('firstname').value
+        const lastName = document.getElementById('lastname').value
+        const keys = Object.keys(sessionStorage);
+        const userId = parseInt(keys[0]);
+        const response = await fetch('/api/Update', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ userName, password, firstName, lastName, userId })
+        })
+        if (response.ok) {
+            alert("הפרטים עודכנו בהצלחה")
+        }
+        else {
+            alert("ארעה שגיאה")
+        }
+    }
+
+</script>
