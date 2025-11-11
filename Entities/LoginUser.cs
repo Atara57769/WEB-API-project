@@ -1,6 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
 
-namespace WebApiShop.Controllers
+namespace Entities
 {
     public class LoginUser
     {

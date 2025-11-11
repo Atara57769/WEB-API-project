@@ -14,4 +14,8 @@
     <None Include="D:\WEB API\WebApiShop\WebApiShop\.editorconfig" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Services\Services.csproj" />
+  </ItemGroup>
+
 </Project>
