@@ -56,19 +56,20 @@
     const submit = document.getElementById('submit')
     submit.addEventListener('click', Update)
     async function Update() {
-        const userName = document.getElementById('username').value
-        const password = document.getElementById('password').value
-        const firstName = document.getElementById('firstname').value
-        const lastName = document.getElementById('lastname').value
+        const UserName = document.getElementById('username').value
+        const Password = document.getElementById('password').value
+        const FirstName = document.getElementById('firstname').value
+        const LastName = document.getElementById('lastname').value
         const keys = Object.keys(sessionStorage);
-        const userId = parseInt(keys[0]);
+        const UserId = parseInt(keys[0]);
         const response = await fetch('/api/Update', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ userName, password, firstName, lastName, userId })
+            body: JSON.stringify({ UserName, Password, FirstName, LastName, UserId })
         })
+
         if (response.ok) {
             alert("הפרטים עודכנו בהצלחה")
         }

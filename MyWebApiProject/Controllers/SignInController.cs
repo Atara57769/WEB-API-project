@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MyProject.Model;
 using System.Text.Json;
+using Entity;
+using Service;
+using System.Security.Cryptography.X509Certificates;
+
 
 
 
@@ -11,23 +14,17 @@ namespace MyWebApiProject.Controllers
     [ApiController]
     public class SignInController : ControllerBase
     {
+        public SignInService s = new();
 
         [HttpPost]
         public IActionResult Post([FromBody] SignIn user1)
         {
-            using (StreamReader reader = System.IO.File.OpenText("D:\\WEB Api\\MyWebApiProject\\MyWebApiProject\\MyWebApiProject\\DataFile.txt"))
-            {
-                string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
-                {
-                    User user = JsonSerializer.Deserialize<User>(currentUserInFile);
-                    if (user.userName == user1.userName1 && user.password == user1.password1)
-                        return CreatedAtAction(nameof(Post), new { id = user.userId }, user);
-                }
-            }
-            return Unauthorized();
-
-
+             User? u = new();
+             u = s.SignIn(user1);
+            if (u == null)
+                return BadRequest();
+            return Ok(u);
+            
         }
     }
 }

@@ -8,6 +8,12 @@
             display:none;
             flex-direction:column;
         }
+        .A{
+            width:5vh;
+            height:5vh;
+            border:1px solid black;
+        }
+
         
     </style>
 </head>
@@ -23,6 +29,13 @@
         <label for="lastname">lastname:</label>
         <input type="text" id="lastname" name="lastname" required /><br /><br />
         <button type="submit" id="submit">Sign Up</button>
+        <button id="checkPasswordBtn">Strong Password</button>
+        <div class="StrongPassword">
+            <div class="A a"></div>
+            <div class="A b"></div>
+            <div class="A c"></div>
+            <div class="A d"></div>
+        </div>
     </div>
     <div id="SignInForm">
         <h2>Login</h2>
@@ -44,17 +57,17 @@
         const submit = document.getElementById('submit')
         submit.addEventListener('click', sign_up)
         async function sign_up() {
-            const userName = document.getElementById('username').value
-            const password = document.getElementById('password').value
-            const firstName = document.getElementById('firstname').value
-            const lastName = document.getElementById('lastname').value
+            const UserName = document.getElementById('username').value
+            const Password = document.getElementById('password').value
+            const FirstName = document.getElementById('firstname').value
+            const LastName = document.getElementById('lastname').value
 
             const response_sign_up = await fetch('/api/SignUp', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userName, password, firstName, lastName })
+                body: JSON.stringify({ UserName, Password, FirstName, LastName })
             })
 
             const resultDiv = document.getElementById('result');
@@ -62,14 +75,15 @@
                 alert("המשתמש נרשם בהצלחה")
             } else {
                 alert("ההרשמה נכשלה")
+                
             }
 
         }
         const submit1 = document.getElementById('submit1')
         submit1.addEventListener('click', sign_in)
         async function sign_in() {
-            const userName1 = document.getElementById('username1').value
-            const password1 = document.getElementById('password1').value
+            const UserName1 = document.getElementById('username1').value
+            const Password1 = document.getElementById('password1').value
      
 
 
@@ -78,7 +92,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ userName1, password1 })
+                body: JSON.stringify({ UserName1, Password1 })
             })
             if (response_sign_in.ok) {
                 const data = await response_sign_in.json();
@@ -89,6 +103,30 @@
                 alert("שם משתמש או סיסמה שגויים")
             }
         }
+        document.getElementById("checkPasswordBtn").addEventListener("click",async function () {
+
+            const strengthBox = document.querySelector(".StrongPassword")
+            strengthBox.style.display = "block"
+
+            const parts = strengthBox.querySelectorAll(".A")
+           
+
+            const Password = document.getElementById("password").value
+            let strengthResponse = await fetch('/api/StrongPassword', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({  Password})
+            })
+
+            let strength = await strengthResponse.json()  
+
+            for (let i = 0; i < strength; i++) {
+                parts[i].style.backgroundColor = "green"
+            }
+           
+        })
             
        
     </script>
