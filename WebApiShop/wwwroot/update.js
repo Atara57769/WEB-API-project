@@ -21,6 +21,9 @@ async function updateUser() {
             body: JSON.stringify(user)
 
         });
+        if (response.status == 400) {
+            throw Error("Your password is too easy.")
+        }
         if (!response.ok) {
             throw Error("run into a problem")
         }

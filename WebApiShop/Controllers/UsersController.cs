@@ -13,7 +13,7 @@ namespace WebApiShop.Controllers
     public class UsersController : ControllerBase
     {
         private UserServices _userService = new UserServices();
-        
+
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {
@@ -38,6 +38,8 @@ namespace WebApiShop.Controllers
         public ActionResult<User> Post([FromBody] User newUser)
         {
             newUser=_userService.AddUser(newUser);
+            if(newUser==null)
+                return BadRequest("password");
             return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
         }
 
@@ -54,9 +56,12 @@ namespace WebApiShop.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] User updateUser)
+        public IActionResult Put(int id, [FromBody] User updateUser)
         {
-          _userService.UpdateUser(id, updateUser);
+          bool sucsess = _userService.UpdateUser(id, updateUser);
+            if (!sucsess)
+                return BadRequest();
+            return Ok();
         }
 
         // DELETE api/<UsersController>/5

@@ -26,6 +26,10 @@
             align-items:center;
             gap: 7px;
         }
+        progress::-moz-progress-bar {
+            background-color:darkorange ; 
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -41,9 +45,12 @@
             <label for="password">Enter your password</label>
             <input type="password" id="password" />
 
-            <!--<button onclick="getResponse()">get</button>-->
+            <!--<button onclick="getUsers()">get</button>-->
             <button onclick="addUser()">send</button>
+            <button onclick="checkPasswordScore()">check password</button>
             <u onclick="displyExistUser()">Login</u>
+            <label for="passwordStrength">password score:</label>
+            <progress id="passwordScore" value="0" max="100"> 32% </progress>
         </div>
 
         <div class="existUser">
@@ -52,7 +59,7 @@
             <input type="email" id="emailLogin" />
             <label for="passwordLogin">Enter your password</label>
             <input type="password" id="passwordLogin" />
-            <button onclick="Login()">send</button>
+            <button onclick="login()">send</button>
         </div>
     </div>
 </body>

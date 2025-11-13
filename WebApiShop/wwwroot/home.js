@@ -1,11 +1,11 @@
 ﻿function displyExistUser() {
     const existUser = document.querySelector(".existUser")
-    existUser.style.display="flex"
+    existUser.style.display = "flex"
 }
 function saveUserInSession(user) {
     sessionStorage.setItem('user', JSON.stringify(user))
 }
-async function getResponse() {
+async function getUsers() {
     try {
         const response = await fetch('api/users')
         if (!response.ok) {
@@ -27,7 +27,7 @@ async function addUser() {
         const lastName = document.querySelector("#lastName").value
         const password = document.querySelector("#password").value
         const user = { email, firstName, lastName, password }
-        const response= await fetch('api/users', {
+        const response = await fetch('api/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -35,6 +35,12 @@ async function addUser() {
             body: JSON.stringify(user)
 
         });
+        if (response.status == 400) {
+            const responseText = await response.text()
+            if (responseText=="password")
+                throw Error("your password is too easy")
+            throw Error("try again pleas")
+        }
         if (!response.ok) {
             throw Error("Run into a problem")
         }
@@ -46,11 +52,11 @@ async function addUser() {
     }
 }
 
-async function Login() {
+async function login() {
     try {
         const email = document.querySelector("#emailLogin").value
         const password = document.querySelector("#passwordLogin").value
-        const LoginUser = { email, password}
+        const LoginUser = { email, password }
         const response = await fetch('api/users/Login', {
             method: 'POST',
             headers: {
@@ -65,9 +71,32 @@ async function Login() {
             alert("Email or password incorrect! please try again ")
             return
         }
-            const data = await response.json();
-            saveUserInSession(data)
-            window.location.href = "update.html"
+        const data = await response.json();
+        saveUserInSession(data)
+        window.location.href = "update.html"
+    }
+    catch (error) {
+        alert(error)
+    }
+}
+
+async function checkPasswordScore() {
+    try {
+        const password = document.querySelector("#password").value
+        const progress = document.querySelector("#passwordScore")
+        const response = await fetch('api/passwords/passwordScore', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(password)
+        });
+     
+        if (!response.ok) {
+            throw Error("error")
+        }
+        const data = await response.json();
+        progress.value = data * 25 
     }
     catch (error) {
         alert(error)
