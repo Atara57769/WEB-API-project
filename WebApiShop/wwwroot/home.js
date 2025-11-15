@@ -35,14 +35,8 @@ async function addUser() {
             body: JSON.stringify(user)
 
         });
-        if (response.status == 400) {
-            const responseText = await response.text()
-            if (responseText=="password")
-                throw Error("your password is too easy")
-            throw Error("try again pleas")
-        }
         if (!response.ok) {
-            throw Error("Run into a problem")
+            throw Error("Please try again")
         }
         const data = await response.json();
         alert(" Sign in successfully")

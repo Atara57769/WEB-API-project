@@ -9,7 +9,11 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class PasswordsController : ControllerBase
     {
-        private PasswordServices _passwordService = new PasswordServices();
+        private IPasswordServices _passwordService;
+        public PasswordsController(IPasswordServices passwordService)
+        {
+            _passwordService = passwordService;
+        }
         // GET: api/<PasswordsController>
         [HttpGet]
         public IEnumerable<string> Get()

@@ -12,8 +12,12 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private UserServices _userService = new UserServices();
+        private IUserServices _userService;
 
+        public UsersController(IUserServices userService)
+        {
+            _userService = userService;
+        }
         [HttpGet]
         public ActionResult<IEnumerable<User>> Get()
         {

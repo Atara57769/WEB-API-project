@@ -4,36 +4,42 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace Services
 {
-    public class UserServices
+    public class UserServices : IUserServices
     {
-        private UserRepositories userRepository = new UserRepositories();
-        private PasswordServices passwordService = new PasswordServices();
-        public  IEnumerable<User> GetUser()
+        private IUserRepositories _userRepository;
+        private IPasswordServices _passwordService;
+
+        public UserServices(IUserRepositories userRepository, IPasswordServices passwordService)
         {
-            return userRepository.GetUsers();
+            _userRepository = userRepository;
+            _passwordService = passwordService;
         }
-        public  User GetUsersById(int id)
+        public IEnumerable<User> GetUser()
         {
-           return userRepository.GetUserByID(id);
+            return _userRepository.GetUsers();
         }
-        public  User AddUser(User user)
+        public User GetUsersById(int id)
         {
-            int passScore = passwordService.GetPasswordScore(user.Password);
+            return _userRepository.GetUserByID(id);
+        }
+        public User AddUser(User user)
+        {
+            int passScore = _passwordService.GetPasswordScore(user.Password);
             if (passScore < 2)
                 return null;
-            return userRepository.AddUser(user);
+            return _userRepository.AddUser(user);
         }
-        public bool UpdateUser(int id,User user)
+        public bool UpdateUser(int id, User user)
         {
-            int passScore = passwordService.GetPasswordScore(user.Password);
+            int passScore = _passwordService.GetPasswordScore(user.Password);
             if (passScore < 2)
                 return false;
-            userRepository.UpdateUser(id,user);
+            _userRepository.UpdateUser(id, user);
             return true;
         }
         public User Login(LoginUser loginUser)
         {
-            return userRepository.Login(loginUser);
+            return _userRepository.Login(loginUser);
         }
 
     }

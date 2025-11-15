@@ -3,16 +3,16 @@ using System.Text.Json;
 
 namespace Repositories
 {
-    public class UserRepositories
+    public class UserRepositories : IUserRepositories
     {
-        private  List<User> _users = new List<User>();
-        private  string _filePath = "..\\Repositories\\users.txt";
-        public  IEnumerable<User> GetUsers()
+        private List<User> _users = new List<User>();
+        private string _filePath = "..\\Repositories\\users.txt";
+        public IEnumerable<User> GetUsers()
         {
             return _users;
         }
 
-        public  User GetUserByID(int id)
+        public User GetUserByID(int id)
         {
             using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
@@ -28,7 +28,7 @@ namespace Repositories
             return null;
         }
 
-        public  User AddUser(User newUser)
+        public User AddUser(User newUser)
         {
             int numberOfUsers = System.IO.File.ReadLines(_filePath).Count();
             newUser.Id = numberOfUsers + 1;
@@ -37,7 +37,7 @@ namespace Repositories
             return newUser;
         }
 
-        public  User LoginUser(User loginUser)
+        public User LoginUser(User loginUser)
         {
             using (StreamReader reader = System.IO.File.OpenText(_filePath))
             {
@@ -52,7 +52,7 @@ namespace Repositories
             return null;
         }
 
-        public  void UpdateUser(int id,User updateUser)
+        public void UpdateUser(int id, User updateUser)
         {
             string textToReplace = string.Empty;
             using (StreamReader reader = System.IO.File.OpenText(_filePath))
