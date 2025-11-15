@@ -10,7 +10,7 @@ using Entity;
 
 namespace Repository
 {
-    public class UpdateRepository
+    public class UpdateRepository : IUpdateRepository
     {
         public bool Update(User user)
         {

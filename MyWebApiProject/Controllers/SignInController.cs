@@ -14,13 +14,18 @@ namespace MyWebApiProject.Controllers
     [ApiController]
     public class SignInController : ControllerBase
     {
-        public SignInService s = new();
+        private readonly ISignInService _service;
+
+        public SignInController(ISignInService service)
+        {
+            _service = service;
+        }
 
         [HttpPost]
         public IActionResult Post([FromBody] SignIn user1)
         {
              User? u = new();
-             u = s.SignIn(user1);
+             u = _service.SignIn(user1);
             if (u == null)
                 return BadRequest();
             return Ok(u);

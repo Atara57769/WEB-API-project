@@ -11,12 +11,16 @@ namespace MyWebApiProject.Controllers
     [ApiController]
     public class UpdateController : ControllerBase
     {
-        public UpdateService s = new();
+        private readonly IUpdateService _service;
 
+        public UpdateController(IUpdateService service)
+        {
+            _service = service;
+        }
         [HttpPut]
         public IActionResult Put([FromBody] User user)
         {
-           bool? u = s.Update(user);
+           bool? u = _service.Update(user);
             if (u == null)
                 return BadRequest();
             if (u==true)

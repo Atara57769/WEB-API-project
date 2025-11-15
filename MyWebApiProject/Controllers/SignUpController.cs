@@ -13,14 +13,19 @@ namespace MyProject.Controllers
     [ApiController]
     public class SignUpController : ControllerBase
     {
-        public SignUpService s = new();
+        private readonly ISignUpService _service;
+
+        public SignUpController(ISignUpService service)
+        {
+            _service = service;
+        }
 
         [HttpPost]
         public IActionResult Post([FromBody] User user)
         {
 
             User? u = new();
-            u = s.SignUp(user);
+            u = _service.SignUp(user);
             if (u == null)
                 return BadRequest();
             return CreatedAtAction(nameof(Post), new { id = u?.UserId }, u);

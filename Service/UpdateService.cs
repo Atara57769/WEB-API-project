@@ -8,15 +8,20 @@ using Entity;
 
 namespace Service
 {
-   public class UpdateService
+    public class UpdateService : IUpdateService
     {
-        public UpdateRepository r = new UpdateRepository();
+        private readonly IUpdateRepository _repo;
+
+        public UpdateService(IUpdateRepository repo)
+        {
+            _repo = repo;
+        }
         public bool? Update(User user)
         {
             var result = Zxcvbn.Core.EvaluatePassword(user.Password);
             if (result.Score < 3)
                 return null;
-             return r.Update(user);
+            return _repo.Update(user);
         }
     }
 }

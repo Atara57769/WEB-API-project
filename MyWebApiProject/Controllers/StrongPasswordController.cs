@@ -9,12 +9,17 @@ namespace MyWebApiProject.Controllers
     [ApiController]
     public class StrongPasswordController : Controller
     {
-        public SignUpService s = new();
+        private readonly ISignUpService _service;
+
+        public StrongPasswordController(ISignUpService service)
+        {
+            _service = service;
+        }
         [HttpPost]
         public int StrongPassword([FromBody] User user)
         {
 
-            return s.StrongPassword(user);
+            return _service.StrongPassword(user);
         }
     }
 }

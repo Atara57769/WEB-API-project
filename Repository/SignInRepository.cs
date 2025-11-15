@@ -9,7 +9,7 @@ using Entity;
 
 namespace Repository
 {
-   public class SignInRepository
+    public class SignInRepository : ISignInRepository
     {
         public User? SignIn(SignIn user1)
         {
@@ -24,7 +24,7 @@ namespace Repository
                         continue;
                     User? user = JsonSerializer.Deserialize<User>(currentUserInFile);
                     if (user?.UserName == user1.UserName1 && user?.Password == user1.Password1)
-                        return  user;
+                        return user;
                 }
             }
             return null;

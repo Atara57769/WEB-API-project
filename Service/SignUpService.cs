@@ -10,9 +10,14 @@ using Zxcvbn;
 
 namespace Service
 {
-   public class SignUpService
+    public class SignUpService : ISignUpService
     {
-        public SignUpRepository r = new SignUpRepository();
+        private readonly ISignUpRepository _repo;
+
+        public SignUpService(ISignUpRepository repo)
+        {
+            _repo = repo;
+        }
         public User? SignUp(User user)
         {
             if (user.FirstName != "" && user.LastName != "" && user.Password != "" && user.UserName != "")
@@ -20,7 +25,7 @@ namespace Service
                 var result = Zxcvbn.Core.EvaluatePassword(user.Password);
                 if (result.Score < 3)
                     return null;
-                return r.SignUp(user); 
+                return _repo.SignUp(user);
             }
             return null;
         }
@@ -28,7 +33,7 @@ namespace Service
         {
             var result = Zxcvbn.Core.EvaluatePassword(user.Password);
             return result.Score;
-        }     
-           
+        }
+
     }
 }

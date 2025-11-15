@@ -8,12 +8,18 @@ using Entity;
 
 namespace Service
 {
-    public  class SignInService
+    public class SignInService : ISignInService
     {
+        private readonly ISignInRepository _repo;
+
+        public SignInService(ISignInRepository repo)
+        {
+            _repo = repo;
+        }
         public SignInRepository r = new SignInRepository();
         public User? SignIn(SignIn user)
         {
-            return r.SignIn(user);
+            return  _repo.SignIn(user);
         }
 
     }
