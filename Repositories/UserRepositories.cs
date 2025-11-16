@@ -51,7 +51,6 @@ namespace Repositories
             }
             return null;
         }
-
         public void UpdateUser(int id, User updateUser)
         {
             string textToReplace = string.Empty;
