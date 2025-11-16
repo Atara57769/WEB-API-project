@@ -1,15 +1,17 @@
-﻿function displyExistUser() {
+﻿function displayExistUser() {
     const existUser = document.querySelector(".existUser")
     existUser.style.display = "flex"
 }
+
 function saveUserInSession(user) {
     sessionStorage.setItem('user', JSON.stringify(user))
 }
+
 async function getUsers() {
     try {
         const response = await fetch('api/users')
         if (!response.ok) {
-            throw new Error("error")
+            throw new Error("Failed to retrieve users")
         }
         else {
             const data = await response.json()
@@ -17,9 +19,10 @@ async function getUsers() {
         }
     }
     catch (error) {
-        alert(error)
+        alert("Error: " + error.message)
     }
 }
+
 async function addUser() {
     try {
         const email = document.querySelector("#email").value
@@ -33,16 +36,16 @@ async function addUser() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
-
-        });
+        })
+        
         if (!response.ok) {
-            throw Error("Please try again")
+            throw Error("Failed to create account. Please check your password strength.")
         }
-        const data = await response.json();
-        alert(" Sign in successfully")
+        const data = await response.json()
+        alert("Account created successfully!")
     }
     catch (error) {
-        alert(error)
+        alert("Error: " + error.message)
     }
 }
 
@@ -50,27 +53,29 @@ async function login() {
     try {
         const email = document.querySelector("#emailLogin").value
         const password = document.querySelector("#passwordLogin").value
-        const LoginUser = { email, password }
-        const response = await fetch('api/users/Login', {
+        const loginUser = { email, password }
+        const response = await fetch('api/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(LoginUser)
-        });
+            body: JSON.stringify(loginUser)
+        })
+        
         if (!response.ok) {
-            throw Error("error")
+            if (response.status === 401) {
+                alert("Login failed: Incorrect email or password. Please try again.")
+                return
+            }
+            throw Error("Login failed. Please try again later.")
         }
-        if (response.status == 204) {
-            alert("Email or password incorrect! please try again ")
-            return
-        }
-        const data = await response.json();
+        
+        const data = await response.json()
         saveUserInSession(data)
         window.location.href = "update.html"
     }
     catch (error) {
-        alert(error)
+        alert("Error: " + error.message)
     }
 }
 
@@ -84,15 +89,15 @@ async function checkPasswordScore() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(password)
-        });
-     
+        })
+
         if (!response.ok) {
-            throw Error("error")
+            throw Error("Failed to check password strength")
         }
-        const data = await response.json();
-        progress.value = data * 25 
+        const data = await response.json()
+        progress.value = data * 25
     }
     catch (error) {
-        alert(error)
+        alert("Error: " + error.message)
     }
 }
