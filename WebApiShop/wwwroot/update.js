@@ -1,16 +1,18 @@
-﻿const welcomText = document.querySelector(".welcomText")
-const curretUser = JSON.parse(sessionStorage.getItem('user'))
-welcomText.textContent = `welcome back ${curretUser.firstName} ${curretUser.lastName}`
+﻿const welcomeText = document.querySelector(".welcomText")
+const currentUser = JSON.parse(sessionStorage.getItem('user'))
+welcomeText.textContent = `Welcome back ${currentUser.firstName} ${currentUser.lastName}`
+
 function saveUserInSession(user) {
     sessionStorage.setItem('user', JSON.stringify(user))
 }
+
 async function updateUser() {
     try {
         const email = document.querySelector("#email").value
         const firstName = document.querySelector("#firstName").value
         const lastName = document.querySelector("#lastName").value
         const password = document.querySelector("#password").value
-        let currentUser =JSON.parse( sessionStorage.getItem('user'))
+        let currentUser = JSON.parse(sessionStorage.getItem('user'))
         const id = currentUser.id
         const user = { id, email, firstName, lastName, password }
         const response = await fetch(`api/users/${currentUser.id}`, {
@@ -19,19 +21,18 @@ async function updateUser() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(user)
-
-        });
-        if (response.status == 400) {
-            throw Error("Your password is too easy.")
+        })
+        
+        if (response.status === 400) {
+            throw Error("Your password is too weak. Please choose a stronger password.")
         }
         if (!response.ok) {
-            throw Error("run into a problem")
+            throw Error("Failed to update profile. Please try again.")
         }
         saveUserInSession(user)
-        alert("update sucessfly")
+        alert("Profile updated successfully!")
     }
     catch (error) {
-        alert(error)
-
+        alert("Error: " + error.message)
     }
 }
