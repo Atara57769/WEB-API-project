@@ -21,7 +21,7 @@ namespace WebApiShop.Controllers
             IEnumerable<User> users = _userService.GetUsers();
             if (users.Count() > 0)
                 return Ok(users);
-            return NoContent();
+            return NotFound();
         }
 
         // GET api/<UsersController>/5
@@ -29,7 +29,7 @@ namespace WebApiShop.Controllers
         public ActionResult<User> Get(int id)
         {
             User user = _userService.GetUserById(id);
-            if (user == null)
+            if(user == null)
                 return NotFound();
             return Ok(user);
         }
@@ -50,6 +50,7 @@ namespace WebApiShop.Controllers
             User user = _userService.Login(loginUser);
             if (user == null)
                 return Unauthorized();
+
             return Ok(user);
         }
 
@@ -59,7 +60,7 @@ namespace WebApiShop.Controllers
             bool success = _userService.UpdateUser(id, updateUser);
             if (!success)
                 return BadRequest();
-            return Ok();
+            return NoContent();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Repositories
 {
     public class UserRepositories : IUserRepositories
     {
-        private const string UsersFilePath = "..\\Repositories\\users.txt";
+        private readonly string UsersFilePath = Path.Combine(Directory.GetCurrentDirectory(), "Repositories", "users.txt");
         private readonly List<User> _users = new List<User>();
 
         public IEnumerable<User> GetUsers()
