@@ -16,10 +16,10 @@ namespace Service
         {
             _repo = repo;
         }
-        public SignInRepository r = new SignInRepository();
+
         public User? SignIn(SignIn user)
         {
-            return  _repo.SignIn(user);
+            return _repo.SignIn(user);
         }
 
     }

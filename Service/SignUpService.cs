@@ -20,11 +20,11 @@ namespace Service
         }
         public User? SignUp(User user)
         {
-            if (user.FirstName != "" && user.LastName != "" && user.Password != "" && user.UserName != "")
+            if (!string.IsNullOrWhiteSpace(user.FirstName) && 
+                !string.IsNullOrWhiteSpace(user.LastName) && 
+                !string.IsNullOrWhiteSpace(user.Password) && 
+                !string.IsNullOrWhiteSpace(user.UserName))
             {
-                var result = Zxcvbn.Core.EvaluatePassword(user.Password);
-                if (result.Score < 3)
-                    return null;
                 return _repo.SignUp(user);
             }
             return null;

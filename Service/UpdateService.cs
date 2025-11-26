@@ -18,9 +18,6 @@ namespace Service
         }
         public bool? Update(User user)
         {
-            var result = Zxcvbn.Core.EvaluatePassword(user.Password);
-            if (result.Score < 3)
-                return null;
             return _repo.Update(user);
         }
     }

@@ -82,17 +82,15 @@
         const submit1 = document.getElementById('submit1')
         submit1.addEventListener('click', sign_in)
         async function sign_in() {
-            const UserName1 = document.getElementById('username1').value
-            const Password1 = document.getElementById('password1').value
-     
-
+            const UserName = document.getElementById('username1').value
+            const Password = document.getElementById('password1').value
 
             const response_sign_in = await fetch('/api/SignIn', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ UserName1, Password1 })
+                body: JSON.stringify({ UserName, Password })
             })
             if (response_sign_in.ok) {
                 const data = await response_sign_in.json();
@@ -109,7 +107,9 @@
             strengthBox.style.display = "block"
 
             const parts = strengthBox.querySelectorAll(".A")
-           
+            
+            // Reset all boxes first
+            parts.forEach(part => part.style.backgroundColor = "")
 
             const Password = document.getElementById("password").value
             let strengthResponse = await fetch('/api/StrongPassword', {
@@ -117,7 +117,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({  Password})
+                body: JSON.stringify({ Password })
             })
 
             let strength = await strengthResponse.json()  

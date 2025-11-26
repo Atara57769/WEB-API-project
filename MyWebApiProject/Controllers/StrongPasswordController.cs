@@ -7,7 +7,7 @@ namespace MyWebApiProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class StrongPasswordController : Controller
+    public class StrongPasswordController : ControllerBase
     {
         private readonly ISignUpService _service;
 
