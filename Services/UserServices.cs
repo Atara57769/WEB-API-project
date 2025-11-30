@@ -15,34 +15,34 @@ namespace Services
             _passwordService = passwordService;
         }
 
-        public IEnumerable<User> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return _userRepository.GetUsers();
+            return await _userRepository.GetUsers();
         }
 
-        public User GetUserById(int id)
+        public async Task<User> GetUserById(int id)
         {
-            return _userRepository.GetUserById(id);
+            return await _userRepository.GetUserById(id);
         }
 
-        public User AddUser(User user)
+        public async Task<User> AddUser(User user)
         {
             int passScore = _passwordService.GetPasswordScore(user.Password);
             if (passScore < MinimumPasswordScore)
                 return null;
-            return _userRepository.AddUser(user);
+            return await _userRepository.AddUser(user);
         }
 
-        public bool UpdateUser(int id, User user)
+        public async Task<bool> UpdateUser(int id, User user)
         {
             int passScore = _passwordService.GetPasswordScore(user.Password);
             if (passScore < MinimumPasswordScore)
                 return false;
-            _userRepository.UpdateUser(id, user);
+            await _userRepository.UpdateUser(id, user);
             return true;
         }
 
-        public User Login(LoginUser loginUser)
+        public Task<User> Login(LoginUser loginUser)
         {
             return _userRepository.Login(loginUser);
         }

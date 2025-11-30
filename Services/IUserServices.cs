@@ -4,10 +4,10 @@ namespace Services
 {
     public interface IUserServices
     {
-        User AddUser(User user);
-        IEnumerable<User> GetUsers();
-        User GetUserById(int id);
-        User Login(LoginUser loginUser);
-        bool UpdateUser(int id, User user);
+        Task<User> AddUser(User user);
+        Task<IEnumerable<User>> GetUsers();
+        Task<User> GetUserById(int id);
+        Task<User> Login(LoginUser loginUser);
+        Task<bool> UpdateUser(int id, User user);
     }
 }

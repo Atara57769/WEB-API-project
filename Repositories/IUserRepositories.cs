@@ -4,10 +4,10 @@ namespace Repositories
 {
     public interface IUserRepositories
     {
-        User AddUser(User newUser);
-        User GetUserById(int id);
-        IEnumerable<User> GetUsers();
-        User Login(LoginUser loginUser);
-        void UpdateUser(int id, User updateUser);
+        Task<User> AddUser(User newUser);
+        Task<User> GetUserById(int id);
+        Task<IEnumerable<User>> GetUsers();
+        Task<User> Login(LoginUser loginUser);
+        Task UpdateUser(int id, User updateUser);
     }
 }
