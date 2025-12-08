@@ -3,13 +3,13 @@ using Repositories;
 
 namespace Services
 {
-    public class UserServices : IUserServices
+    public class UserServices : IUserService
     {
         private const int MinimumPasswordScore = 2;
-        private readonly IUserRepositories _userRepository;
-        private readonly IPasswordServices _passwordService;
+        private readonly IUserRepository _userRepository;
+        private readonly IPasswordService _passwordService;
 
-        public UserServices(IUserRepositories userRepository, IPasswordServices passwordService)
+        public UserServices(IUserRepository userRepository, IPasswordService passwordService)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
@@ -27,6 +27,11 @@ namespace Services
 
         public async Task<User> AddUser(User user)
         {
+            if (await _userRepository.IsEmailExists(user.Email))
+            {
+                return null;
+            }
+
             int passScore = _passwordService.GetPasswordScore(user.Password);
             if (passScore < MinimumPasswordScore)
                 return null;
@@ -41,7 +46,7 @@ namespace Services
             await _userRepository.UpdateUser(id, user);
             return true;
         }
-
+        
         public Task<User> Login(LoginUser loginUser)
         {
             return _userRepository.Login(loginUser);

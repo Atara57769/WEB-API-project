@@ -2,7 +2,7 @@
 using Zxcvbn;
 namespace Services
 {
-    public class PasswordServices : IPasswordServices
+    public class PasswordService : IPasswordService
     {
         public int GetPasswordScore(string password)
         {

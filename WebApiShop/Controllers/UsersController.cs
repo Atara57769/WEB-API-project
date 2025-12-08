@@ -8,9 +8,9 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserServices _userService;
+        private readonly IUserService _userService;
 
-        public UsersController(IUserServices userService)
+        public UsersController(IUserService userService)
         {
             _userService = userService;
         }
@@ -38,10 +38,10 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Post([FromBody] User newUser)
         {
-            newUser = await _userService.AddUser(newUser);
-            if (newUser == null)
-                return BadRequest("password");
-            return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
+                newUser = await _userService.AddUser(newUser);
+                if (newUser == null)
+                    return BadRequest();
+                return CreatedAtAction(nameof(Get), new { id = newUser.Id }, newUser);
         }
 
         [HttpPost("login")]

@@ -5,21 +5,17 @@ using System.Collections.Generic;
 
 namespace Entities;
 
-public partial class Product
+public partial class Order
 {
     public int Id { get; set; }
 
-    public int? CategoryId { get; set; }
+    public int UserId { get; set; }
 
-    public string ProductName { get; set; }
+    public DateOnly OrderDate { get; set; }
 
-    public string Description { get; set; }
-
-    public double? Price { get; set; }
-
-    public string ImageUrl { get; set; }
-
-    public virtual Category Category { get; set; }
+    public double OrderSum { get; set; }
 
     public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+    public virtual User User { get; set; }
 }
