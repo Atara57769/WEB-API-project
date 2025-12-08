@@ -16,7 +16,8 @@ public partial class User
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
-
     [Required]
     public string Password { get; set; }
+
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 }

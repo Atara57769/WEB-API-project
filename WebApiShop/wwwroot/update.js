@@ -22,10 +22,6 @@ async function updateUser() {
             },
             body: JSON.stringify(user)
         })
-        
-        if (response.status === 400) {
-            throw Error("Your password is too weak. Please choose a stronger password.")
-        }
         if (!response.ok) {
             throw Error("Failed to update profile. Please try again.")
         }

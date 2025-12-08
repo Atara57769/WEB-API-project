@@ -2,7 +2,7 @@
 
 namespace Services
 {
-    public interface IUserServices
+    public interface IUserService
     {
         Task<User> AddUser(User user);
         Task<IEnumerable<User>> GetUsers();

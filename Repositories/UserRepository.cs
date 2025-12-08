@@ -4,11 +4,11 @@ using System.Text.Json;
 
 namespace Repositories
 {
-    public class UserRepositories : IUserRepositories
+    public class UserRepository : IUserRepository
     {
         private readonly ApiDBContext _apiDbContext;
 
-        public UserRepositories(ApiDBContext apiDbContext)
+        public UserRepository(ApiDBContext apiDbContext)
         {
             _apiDbContext = apiDbContext;
         }
@@ -38,6 +38,14 @@ namespace Repositories
         public async Task<User> Login(LoginUser loginUser)
         {
             return await _apiDbContext.Users.FirstOrDefaultAsync(user => user.Email == loginUser.Email && user.Password == loginUser.Password);
+        }
+
+        public async Task<bool> IsEmailExists(string email)
+        {
+            User userWithSameEmail = await _apiDbContext.Users.FirstOrDefaultAsync(user => user.Email == email);
+            if (userWithSameEmail != null)
+                return true;
+            return false;
         }
     }
 }

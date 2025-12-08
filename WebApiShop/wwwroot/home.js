@@ -39,9 +39,6 @@ async function addUser() {
         })
         
         if (!response.ok) {
-            const responseText = await response.text()
-            if(responseText=="password")
-                throw Error("Failed to create account. Please check your password strength.")
             throw Error("Failed to create account. Please try again")
         }
         const data = await response.json()

@@ -9,41 +9,10 @@ namespace WebApiShop.Controllers
     [ApiController]
     public class PasswordsController : ControllerBase
     {
-        private IPasswordServices _passwordService;
-        public PasswordsController(IPasswordServices passwordService)
+        private IPasswordService _passwordService;
+        public PasswordsController(IPasswordService passwordService)
         {
             _passwordService = passwordService;
-        }
-        // GET: api/<PasswordsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<PasswordsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<PasswordsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<PasswordsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<PasswordsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
         [HttpPost("PasswordScore")]
         public ActionResult<int> PasswordScore([FromBody] string password)

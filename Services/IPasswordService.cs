@@ -1,6 +1,6 @@
 ﻿namespace Services
 {
-    public interface IPasswordServices
+    public interface IPasswordService
     {
         int GetPasswordScore(string password);
     }

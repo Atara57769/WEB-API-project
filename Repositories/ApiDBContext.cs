@@ -16,6 +16,10 @@ public partial class ApiDBContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<Order> Orders { get; set; }
+
+    public virtual DbSet<OrderItem> OrderItems { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -24,16 +28,51 @@ public partial class ApiDBContext : DbContext
     {
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CategoryName).HasColumnName("Category_Name");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CategoryName).HasColumnName("category_name");
+        });
+
+        modelBuilder.Entity<Order>(entity =>
+        {
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.OrderDate).HasColumnName("order_date");
+            entity.Property(e => e.OrderSum).HasColumnName("order_sum");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Orders)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Orders_Users");
+        });
+
+        modelBuilder.Entity<OrderItem>(entity =>
+        {
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.OrderId).HasColumnName("order_id");
+            entity.Property(e => e.ProdactId)
+                .HasAnnotation("Relational:DefaultConstraintName", "DF_OrderItems_Prodact_id")
+                .HasColumnName("prodact_id");
+            entity.Property(e => e.Quantity).HasColumnName("quantity");
+
+            entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.OrderId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderItems_Orders");
+
+            entity.HasOne(d => d.Prodact).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.ProdactId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_OrderItems_Products");
         });
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.CategoryId).HasColumnName("Category_ID");
-            entity.Property(e => e.ImageUrl).HasColumnName("ImageURL");
-            entity.Property(e => e.ProductName).HasColumnName("Product_Name");
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.CategoryId).HasColumnName("category_id");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.ImageUrl).HasColumnName("image_url");
+            entity.Property(e => e.Price).HasColumnName("price");
+            entity.Property(e => e.ProductName).HasColumnName("product_name");
 
             entity.HasOne(d => d.Category).WithMany(p => p.Products)
                 .HasForeignKey(d => d.CategoryId)
@@ -42,19 +81,21 @@ public partial class ApiDBContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.Email)
                 .IsRequired()
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("email");
             entity.Property(e => e.FirstName)
                 .IsUnicode(false)
-                .HasColumnName("First_Name");
+                .HasColumnName("first_name");
             entity.Property(e => e.LastName)
                 .IsUnicode(false)
-                .HasColumnName("Last_name");
+                .HasColumnName("last_name");
             entity.Property(e => e.Password)
                 .IsRequired()
-                .IsUnicode(false);
+                .IsUnicode(false)
+                .HasColumnName("password");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -1,19 +1,33 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddScoped<IUserRepositories, UserRepositories>();
-builder.Services.AddScoped<IPasswordServices, PasswordServices>();
-builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IUserService, UserServices>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IOrderService, OrderService>(); 
 builder.Services.AddDbContext<ApiDBContext>
     (options => options.UseSqlServer("Data Source = ATARA; Initial Catalog = ApiDB; Integrated Security = True; Trust Server Certificate=True"));
 // Add services to the container.
 
 builder.Services.AddControllers();
-
+builder.Services.AddOpenApi();
 var app = builder.Build();
-
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "My API V1");
+    });
+}
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
