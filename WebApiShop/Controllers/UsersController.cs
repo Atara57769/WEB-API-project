@@ -59,7 +59,7 @@ namespace WebApiShop.Controllers
             bool success = await _userService.UpdateUser(id, updateUser);
             if (!success)
                 return BadRequest();
-            return Ok();
+            return NoContent();
         }
     }
 }
