@@ -11,12 +11,12 @@ namespace Repository
 {
     public class SignInRepository : ISignInRepository
     {
-        public User? SignIn(SignIn user1)
+        public async Task<User?> SignIn(SignIn user1)
         {
             using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt"))
             {
                 string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
+                while ((currentUserInFile = await reader.ReadLineAsync()) != null)
                 {
                     if (string.IsNullOrWhiteSpace(currentUserInFile))
                         continue;

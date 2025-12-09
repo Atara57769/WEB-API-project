@@ -4,6 +4,6 @@ namespace Service
 {
     public interface IUpdateService
     {
-        bool? Update(User user);
+        Task<bool?> Update(User user);
     }
 }

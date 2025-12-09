@@ -16,9 +16,9 @@ namespace Service
         {
             _repo = repo;
         }
-        public bool? Update(User user)
+        public async Task<bool?> Update(User user)
         {
-            return _repo.Update(user);
+            return await _repo.Update(user);
         }
     }
 }

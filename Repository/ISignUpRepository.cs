@@ -4,6 +4,6 @@ namespace Repository
 {
     public interface ISignUpRepository
     {
-        User? SignUp(User user);
+        Task<User?> SignUp(User user);
     }
 }

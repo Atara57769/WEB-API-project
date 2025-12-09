@@ -18,14 +18,14 @@ namespace Service
         {
             _repo = repo;
         }
-        public User? SignUp(User user)
+        public async Task<User?> SignUp(User user)
         {
             if (!string.IsNullOrWhiteSpace(user.FirstName) && 
                 !string.IsNullOrWhiteSpace(user.LastName) && 
                 !string.IsNullOrWhiteSpace(user.Password) && 
                 !string.IsNullOrWhiteSpace(user.UserName))
             {
-                return _repo.SignUp(user);
+                return await _repo.SignUp(user);
             }
             return null;
         }

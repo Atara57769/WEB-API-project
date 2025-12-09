@@ -12,16 +12,13 @@ namespace Repository
 {
     public class SignUpRepository : ISignUpRepository
     {
-        public User? SignUp(User user)
+        public async Task<User?> SignUp(User user)
         {
-
-            int numberOfUsers = System.IO.File.ReadLines("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt").Count();
+            int numberOfUsers = (await System.IO.File.ReadAllLinesAsync("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt")).Length;
             user.UserId = numberOfUsers + 1;
             string userJson = JsonSerializer.Serialize(user);
-            System.IO.File.AppendAllText("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt", userJson + Environment.NewLine);
+            await System.IO.File.AppendAllTextAsync("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt", userJson + Environment.NewLine);
             return user;
-
-
         }
     }
 }

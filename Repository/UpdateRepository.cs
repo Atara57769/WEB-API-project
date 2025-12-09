@@ -12,13 +12,13 @@ namespace Repository
 {
     public class UpdateRepository : IUpdateRepository
     {
-        public bool Update(User user)
+        public async Task<bool> Update(User user)
         {
             string textToReplace = string.Empty;
             using (StreamReader reader = System.IO.File.OpenText("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt"))
             {
                 string? currentUserInFile;
-                while ((currentUserInFile = reader.ReadLine()) != null)
+                while ((currentUserInFile = await reader.ReadLineAsync()) != null)
                 {
                     if (string.IsNullOrWhiteSpace(currentUserInFile))
                         continue;
@@ -33,10 +33,10 @@ namespace Repository
 
             if (textToReplace != string.Empty)
             {
-                string text = System.IO.File.ReadAllText("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt");
+                string text = await System.IO.File.ReadAllTextAsync("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt");
 
                 text = text.Replace(textToReplace, JsonSerializer.Serialize(user));
-                System.IO.File.WriteAllText("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt", text);
+                await System.IO.File.WriteAllTextAsync("C:\\Users\\aliza.twito\\Documents\\ruti\\WEB\\MyWebApiProject\\DataFile.txt", text);
                 return true;
             }
             return false;

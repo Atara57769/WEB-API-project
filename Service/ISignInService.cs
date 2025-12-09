@@ -4,6 +4,6 @@ namespace Service
 {
     public interface ISignInService
     {
-        User? SignIn(SignIn user);
+        Task<User?> SignIn(SignIn user);
     }
 }

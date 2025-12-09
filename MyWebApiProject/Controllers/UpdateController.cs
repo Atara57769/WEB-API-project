@@ -21,14 +21,14 @@ namespace MyWebApiProject.Controllers
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody] User user)
+        public async Task<IActionResult> Put([FromBody] User user)
         {
             // Validate password strength FIRST in controller
             int passwordScore = _passwordService.StrongPassword(user);
             if (passwordScore < 3)
                 return BadRequest($"Password is too weak (score: {passwordScore}/4). Please choose a stronger password with a score of at least 3.");
 
-            bool? u = _service.Update(user);
+            bool? u = await _service.Update(user);
             if (u == null)
                 return BadRequest("Update failed.");
             if (u == true)

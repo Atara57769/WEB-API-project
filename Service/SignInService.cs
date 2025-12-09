@@ -17,9 +17,9 @@ namespace Service
             _repo = repo;
         }
 
-        public User? SignIn(SignIn user)
+        public async Task<User?> SignIn(SignIn user)
         {
-            return _repo.SignIn(user);
+            return await _repo.SignIn(user);
         }
 
     }
