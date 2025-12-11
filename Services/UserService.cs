@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using AutoMapper;
+using DTOs;
+using Entities;
 using Repositories;
 
 namespace Services
@@ -8,26 +10,30 @@ namespace Services
         private const int MinimumPasswordScore = 2;
         private readonly IUserRepository _userRepository;
         private readonly IPasswordService _passwordService;
+        private readonly IMapper _mapper;
 
-        public UserServices(IUserRepository userRepository, IPasswordService passwordService)
+
+        public UserServices(IUserRepository userRepository, IPasswordService passwordService, IMapper mapper)
         {
             _userRepository = userRepository;
             _passwordService = passwordService;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<UserDTO>> GetUsers()
         {
-            return await _userRepository.GetUsers();
+             return _mapper.Map<IEnumerable<User>, IEnumerable<UserDTO>>(await _userRepository.GetUsers());
         }
 
-        public async Task<User> GetUserById(int id)
+        public async Task<UserDTO> GetUserById(int id)
         {
-            return await _userRepository.GetUserById(id);
+             return _mapper.Map<User, UserDTO>(await _userRepository.GetUserById(id));
+            
         }
 
-        public async Task<User> AddUser(User user)
+        public async Task<PostUserDTO> AddUser(PostUserDTO user)
         {
-            if (await _userRepository.IsEmailExists(user.Email))
+            if (await _userRepository.IsEmailExists(user.Email)!=null)
             {
                 return null;
             }
@@ -35,21 +41,24 @@ namespace Services
             int passScore = _passwordService.GetPasswordScore(user.Password);
             if (passScore < MinimumPasswordScore)
                 return null;
-            return await _userRepository.AddUser(user);
+            return _mapper.Map<User,PostUserDTO >(await _userRepository.AddUser(_mapper.Map<PostUserDTO,User>(user)));
         }
 
-        public async Task<bool> UpdateUser(int id, User user)
+        public async Task<bool> UpdateUser(int id, PostUserDTO user)
         {
+            User userWithSameEmail = await _userRepository.IsEmailExists(user.Email);
+            if (userWithSameEmail != null && userWithSameEmail.Id != user.Id)
+                return false;
             int passScore = _passwordService.GetPasswordScore(user.Password);
             if (passScore < MinimumPasswordScore)
                 return false;
-            await _userRepository.UpdateUser(id, user);
+            await _userRepository.UpdateUser(id, _mapper.Map<PostUserDTO, User>(user));
             return true;
         }
         
-        public Task<User> Login(LoginUser loginUser)
+        public async Task<UserDTO> Login(LoginUserDTO loginUser)
         {
-            return _userRepository.Login(loginUser);
+            return _mapper.Map < User, UserDTO> (await _userRepository.Login(_mapper.Map<LoginUserDTO, User>(loginUser)));
         }
     }
 }

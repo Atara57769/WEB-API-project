@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using DTOs;
+using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -16,9 +17,9 @@ namespace WebApiShop.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> Get()
+        public async Task<ActionResult<IEnumerable<UserDTO>>> Get()
         {
-            IEnumerable<User> users = await _userService.GetUsers();
+            IEnumerable<UserDTO> users = await _userService.GetUsers();
             if (users.Count() > 0)
                 return Ok(users);
             return NoContent();
@@ -26,9 +27,9 @@ namespace WebApiShop.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> Get(int id)
+        public async Task<ActionResult<UserDTO>> Get(int id)
         {
-            User user = await _userService.GetUserById(id);
+            UserDTO user = await _userService.GetUserById(id);
             if (user == null)
                 return NotFound();
             return Ok(user);
@@ -36,7 +37,7 @@ namespace WebApiShop.Controllers
 
         // POST api/<UsersController>
         [HttpPost]
-        public async Task<ActionResult<User>> Post([FromBody] User newUser)
+        public async Task<ActionResult<PostUserDTO>> Post([FromBody] PostUserDTO newUser)
         {
                 newUser = await _userService.AddUser(newUser);
                 if (newUser == null)
@@ -45,16 +46,16 @@ namespace WebApiShop.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login([FromBody] LoginUser loginUser)
+        public async Task<ActionResult<UserDTO>> Login([FromBody] LoginUserDTO loginUser)
         {
-            User user = await _userService.Login(loginUser);
+            UserDTO user = await _userService.Login(loginUser);
             if (user == null)
                 return Unauthorized();
             return Ok(user);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] User updateUser)
+        public async Task<IActionResult> Put(int id, [FromBody] PostUserDTO updateUser)
         {
             bool success = await _userService.UpdateUser(id, updateUser);
             if (!success)
