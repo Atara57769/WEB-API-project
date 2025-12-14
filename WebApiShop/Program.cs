@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Repositories;
 using Services;
 
@@ -15,7 +16,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>(); 
 builder.Services.AddDbContext<ApiDBContext>
-    (options => options.UseSqlServer("Data Source = ATARA; Initial Catalog = ApiDB; Integrated Security = True; Trust Server Certificate=True"));
+    (options => options.UseSqlServer(builder.Configuration.GetConnectionString("Home")));
 // Add services to the container.
 
 builder.Services.AddControllers();
