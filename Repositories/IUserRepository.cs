@@ -7,8 +7,8 @@ namespace Repositories
         Task<User> AddUser(User newUser);
         Task<User> GetUserById(int id);
         Task<IEnumerable<User>> GetUsers();
-        Task<User> Login(LoginUser loginUser);
+        Task<User> Login(string email, string password);
         Task UpdateUser(int id, User updateUser);
-        Task<bool> IsEmailExists(string email);
+        Task<User> UserWithSameEmail(string email);
     }
 }

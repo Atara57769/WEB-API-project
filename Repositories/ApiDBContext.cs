@@ -2,9 +2,8 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using Entities;
 using Microsoft.EntityFrameworkCore;
-
+using Entities;
 namespace Repositories;
 
 public partial class ApiDBContext : DbContext
@@ -29,7 +28,7 @@ public partial class ApiDBContext : DbContext
         modelBuilder.Entity<Category>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CategoryName).HasColumnName("category_name");
+            entity.Property(e => e.Name).HasColumnName("category_name");
         });
 
         modelBuilder.Entity<Order>(entity =>
@@ -49,9 +48,9 @@ public partial class ApiDBContext : DbContext
         {
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.OrderId).HasColumnName("order_id");
-            entity.Property(e => e.ProdactId)
+            entity.Property(e => e.ProductId)
                 .HasAnnotation("Relational:DefaultConstraintName", "DF_OrderItems_Prodact_id")
-                .HasColumnName("prodact_id");
+                .HasColumnName("product_id");
             entity.Property(e => e.Quantity).HasColumnName("quantity");
 
             entity.HasOne(d => d.Order).WithMany(p => p.OrderItems)
@@ -59,8 +58,8 @@ public partial class ApiDBContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderItems_Orders");
 
-            entity.HasOne(d => d.Prodact).WithMany(p => p.OrderItems)
-                .HasForeignKey(d => d.ProdactId)
+            entity.HasOne(d => d.Product).WithMany(p => p.OrderItems)
+                .HasForeignKey(d => d.ProductId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_OrderItems_Products");
         });

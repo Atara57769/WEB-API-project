@@ -1,10 +1,11 @@
-﻿using Entities;
+﻿using DTOs;
+using Entities;
 
 namespace Services
 {
     public interface IOrderService
     {
-        Task<Order> AddOrder(Order order);
-        Task<Order> GetOrderById(int id);
+        Task<OrderDTO> AddOrder(OrderDTO order);
+        Task<OrderDTO> GetOrderById(int id);
     }
 }

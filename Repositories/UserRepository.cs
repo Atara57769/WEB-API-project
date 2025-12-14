@@ -14,7 +14,7 @@ namespace Repositories
         }
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _apiDbContext.Users.ToListAsync();
+            return await _apiDbContext.Users.Include(user=>user.Orders).ToListAsync();
         }
 
         public async Task<User> GetUserById(int id)
@@ -35,17 +35,16 @@ namespace Repositories
             await _apiDbContext.SaveChangesAsync();
         }
 
-        public async Task<User> Login(LoginUser loginUser)
+        public async Task<User> Login(string email,string password)
         {
-            return await _apiDbContext.Users.FirstOrDefaultAsync(user => user.Email == loginUser.Email && user.Password == loginUser.Password);
+            return await _apiDbContext.Users.Include(user=>user.Orders).FirstOrDefaultAsync(user => user.Email == email && user.Password == password);
         }
 
-        public async Task<bool> IsEmailExists(string email)
+        public async Task<User> UserWithSameEmail(string email)
         {
             User userWithSameEmail = await _apiDbContext.Users.FirstOrDefaultAsync(user => user.Email == email);
-            if (userWithSameEmail != null)
-                return true;
-            return false;
+            return userWithSameEmail;
+
         }
     }
 }
