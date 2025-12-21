@@ -9,6 +9,6 @@ namespace Repositories
         Task<IEnumerable<User>> GetUsers();
         Task<User> Login(string email, string password);
         Task UpdateUser(int id, User updateUser);
-        Task<User> UserWithSameEmail(string email);
+        Task<bool> UserWithSameEmail(string email, int id);
     }
 }

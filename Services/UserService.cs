@@ -44,9 +44,9 @@ namespace Services
         {
             return _mapper.Map < User, UserDTO> (await _userRepository.Login(loginUser.Email, loginUser.Password));
         }
-        public async Task<User> UserWithSameEmail(string email)
+        public async Task<bool> UserWithSameEmail(string email,int id=-1)
         {
-            return await _userRepository.UserWithSameEmail(email);
+            return await _userRepository.UserWithSameEmail(email,id);
         }
         public bool IsPasswordStrong(string password)
         {

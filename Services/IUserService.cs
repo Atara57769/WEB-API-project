@@ -10,7 +10,7 @@ namespace Services
         Task<UserDTO> GetUserById(int id);
         Task<UserDTO> Login(LoginUserDTO loginUser);
         Task UpdateUser(int id, PostUserDTO user);
-        Task<User> UserWithSameEmail(string email);
+        Task<bool> UserWithSameEmail(string email,int id=-1);
         public bool IsPasswordStrong(string password);
     }
 }

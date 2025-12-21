@@ -39,7 +39,7 @@ namespace WebApiShop.Controllers
         [HttpPost]
         public async Task<ActionResult<PostUserDTO>> Post([FromBody] PostUserDTO newUser)
         {
-            if (_userService.UserWithSameEmail(newUser.Email)!=null)
+            if (!await _userService.UserWithSameEmail(newUser.Email))
                 return BadRequest("The email already exists. Please try again.");
             if (!_userService.IsPasswordStrong(newUser.Password))
                 return BadRequest("The password is too weak. Please try again.");
@@ -61,13 +61,12 @@ namespace WebApiShop.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] PostUserDTO updateUser)
         {
-            User userWithSameEmail = await _userService.UserWithSameEmail(updateUser.Email);
-            if (userWithSameEmail != null && userWithSameEmail.Id != updateUser.Id)
+            if (!await _userService.UserWithSameEmail(updateUser.Email, updateUser.Id))
                 return BadRequest("The email already exists. Please try again.");
             if (!_userService.IsPasswordStrong(updateUser.Password))
                 return BadRequest("The password is too weak. Please try again.");
             await _userService.UpdateUser(id, updateUser);
             return NoContent();
-        }
+       }
     }
 }

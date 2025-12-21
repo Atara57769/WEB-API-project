@@ -40,10 +40,20 @@ namespace Repositories
             return await _apiDbContext.Users.Include(user=>user.Orders).FirstOrDefaultAsync(user => user.Email == email && user.Password == password);
         }
 
-        public async Task<User> UserWithSameEmail(string email)
+        public async Task<bool> UserWithSameEmail(string email,int id)
         {
-            User userWithSameEmail = await _apiDbContext.Users.FirstOrDefaultAsync(user => user.Email == email);
-            return userWithSameEmail;
+            User userWithSameEmail;
+            if (id < 0)
+            {
+                 userWithSameEmail = await _apiDbContext.Users.FirstOrDefaultAsync(user => user.Email == email);
+            }
+            else
+            {
+                 userWithSameEmail = await _apiDbContext.Users.FirstOrDefaultAsync(user => user.Email == email && user.Id != id);
+            }
+           if(userWithSameEmail == null)
+                return true;
+            return false;
 
         }
     }
