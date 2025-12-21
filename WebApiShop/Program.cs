@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Repositories;
 using Services;
+using NLog.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -18,7 +19,7 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddDbContext<ApiDBContext>
     (options => options.UseSqlServer(builder.Configuration.GetConnectionString("Home")));
 // Add services to the container.
-
+builder.Host.UseNLog();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 var app = builder.Build();

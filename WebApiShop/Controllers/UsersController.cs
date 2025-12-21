@@ -1,5 +1,4 @@
 ﻿using DTOs;
-using Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services;
 
@@ -10,10 +9,12 @@ namespace WebApiShop.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService,ILogger<UsersController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -55,6 +56,7 @@ namespace WebApiShop.Controllers
             UserDTO user = await _userService.Login(loginUser);
             if (user == null)
                 return Unauthorized();
+            _logger.LogInformation($"login attempted id:{user.Id} email:{user.Email} first name:{user.FirstName} last name:{user.LastName}");
             return Ok(user);
         }
 
