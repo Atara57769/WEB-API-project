@@ -9,13 +9,13 @@ namespace DTOs
      public record ProductDTO(
      int Id ,
 
-     int? CategoryId ,
+     int CategoryId ,
 
      string ProductName ,
 
      string Description ,
 
-     double? Price ,
+     double Price ,
 
      string ImageUrl ,
 

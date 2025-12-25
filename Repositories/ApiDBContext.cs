@@ -2,12 +2,14 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
 using Entities;
+using Microsoft.EntityFrameworkCore;
+
 namespace Repositories;
 
 public partial class ApiDBContext : DbContext
 {
+    protected ApiDBContext() { }
     public ApiDBContext(DbContextOptions<ApiDBContext> options)
         : base(options)
     {
@@ -28,7 +30,7 @@ public partial class ApiDBContext : DbContext
         modelBuilder.Entity<Category>(entity =>
         {
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.Name).HasColumnName("category_name");
+            entity.Property(e => e.Name).HasColumnName("name");
         });
 
         modelBuilder.Entity<Order>(entity =>
