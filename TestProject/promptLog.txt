@@ -1,0 +1,14 @@
+this is my category repo create unit tests using moq
+create integration tests
+use the dispose function
+create one with data
+this is product repo and entity create unit test like the example for: exist product and not
+create integration tests like the example exists product and not notice the delete
+orders repo and entity create unit tests for :correct id and incorrect, add order with order items
+create integration tests
+user repo and entity create unit tests
+change the update test-create an user and then update is email and first name
+add tests for get empty and full, login with incorrect details, add user
+add hooks for 
+the tests in the tear up cerate the data base and in the tear down delete it
+tests covered=67.4%
