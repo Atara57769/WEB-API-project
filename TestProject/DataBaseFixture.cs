@@ -16,15 +16,12 @@ namespace TestProject
         {
             // Set up the test database connection and initialize the context
             var options = new DbContextOptionsBuilder<ApiDBContext>()
-                
+
                 .UseSqlServer("Data Source = ATARA; Initial Catalog = ApiDB_test; Integrated Security = True; Trust Server Certificate=True")
                 .Options;
             Context = new ApiDBContext(options);
             Context.Database.EnsureCreated();
         }
-
-  
-
         public void Dispose()
         {
             // Clean up the test database after all tests are completed

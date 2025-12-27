@@ -1,4 +1,5 @@
 ﻿using Entities;
+using Microsoft.EntityFrameworkCore;
 using Repositories;
 using System;
 using System.Collections.Generic;
@@ -8,26 +9,30 @@ using System.Threading.Tasks;
 
 namespace TestProject
 {
-    public class ProductRepositoryIntegrationTests : IClassFixture<DatabaseFixture>
+    public class ProductRepositoryIntegrationTests : IDisposable
     {
+        private readonly DatabaseFixture _fixture;
         private readonly ApiDBContext _dbContext;
         private readonly ProductRepository _productRepository;
-        public ProductRepositoryIntegrationTests(DatabaseFixture databaseFixture)
+
+        public ProductRepositoryIntegrationTests()
         {
-            _dbContext = databaseFixture.Context;
+            _fixture = new DatabaseFixture();
+            _dbContext = _fixture.Context;
             _productRepository = new ProductRepository(_dbContext);
         }
+        public void Dispose()
+        {
+            _fixture.Dispose();
+        }
+
         [Fact]
         public async Task GetProducts_WhenProductsExist_ReturnsAllProductsWithCategory()
         {
-           
-            _dbContext.Products.RemoveRange(_dbContext.Products);
-            _dbContext.Categories.RemoveRange(_dbContext.Categories);
-            await _dbContext.SaveChangesAsync();
-
+            // Arrange
             var category = new Category { Name = "Electronics" };
             await _dbContext.Categories.AddAsync(category);
-            await _dbContext.SaveChangesAsync(); 
+            await _dbContext.SaveChangesAsync();
 
             var testProducts = new List<Product>
             {
@@ -47,13 +52,10 @@ namespace TestProject
             Assert.All(result, p => Assert.NotNull(p.Category));
             Assert.Contains(result, p => p.ProductName == "Laptop" && p.Category.Name == "Electronics");
         }
+
         [Fact]
         public async Task GetProducts_WhenNoProductsExist_ReturnsEmptyList()
         {
-            // Arrange
-            _dbContext.Products.RemoveRange(_dbContext.Products);
-            await _dbContext.SaveChangesAsync();
-
             // Act
             var result = await _productRepository.GetProducts();
 
@@ -61,6 +63,5 @@ namespace TestProject
             Assert.NotNull(result);
             Assert.Empty(result);
         }
-
     }
 }

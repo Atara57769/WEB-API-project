@@ -9,21 +9,28 @@ using System.Threading.Tasks;
 
 namespace TestProject
 {
-    public class UserRepositoryIntegrationTests : IClassFixture<DatabaseFixture>
+    public class UserRepositoryIntegrationTests : IDisposable
     {
+        private readonly DatabaseFixture _fixture;
         private readonly ApiDBContext _dbContext;
         private readonly UserRepository _userRepository;
-        public UserRepositoryIntegrationTests(DatabaseFixture databaseFixture)
+
+        public UserRepositoryIntegrationTests()
         {
-            _dbContext = databaseFixture.Context;
+            _fixture = new DatabaseFixture();
+            _dbContext = _fixture.Context;
             _userRepository = new UserRepository(_dbContext);
         }
-        
+
+        public void Dispose()
+        {
+            _fixture.Dispose();
+        }
+
         [Fact]
         public async Task Login_ReturnsNull_WhenCredentialsAreIncorrect()
         {
             // Arrange
-            _dbContext.Users.RemoveRange(_dbContext.Users);
             var user = new User { FirstName = "RealUser", Email = "real@test.com", Password = "CorrectPassword" };
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
@@ -34,15 +41,10 @@ namespace TestProject
             // Assert
             Assert.Null(result);
         }
+
         [Fact]
         public async Task GetUsers_ReturnsEmptyList_WhenNoUsersInDatabase()
         {
-            // Arrange
-            _dbContext.OrderItems.RemoveRange(_dbContext.OrderItems);
-            _dbContext.Orders.RemoveRange(_dbContext.Orders);
-            _dbContext.Users.RemoveRange(_dbContext.Users);
-            await _dbContext.SaveChangesAsync();
-
             // Act
             var result = await _userRepository.GetUsers();
 
@@ -50,15 +52,11 @@ namespace TestProject
             Assert.NotNull(result);
             Assert.Empty(result);
         }
+
         [Fact]
         public async Task GetUsers_ReturnsUsersWithOrders_FromDatabase()
         {
             // Arrange
-            _dbContext.OrderItems.RemoveRange(_dbContext.OrderItems);
-            _dbContext.Orders.RemoveRange(_dbContext.Orders);
-            _dbContext.Users.RemoveRange(_dbContext.Users);
-            await _dbContext.SaveChangesAsync();
-
             var user = new User { FirstName = "Alice", Email = "alice@db.com", Password = "123" };
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
@@ -75,13 +73,11 @@ namespace TestProject
             var fetchedUser = result.First(u => u.Email == "alice@db.com");
             Assert.Single(fetchedUser.Orders);
         }
+
         [Fact]
         public async Task Login_ReturnsCorrectUser_WhenCredentialsMatch()
         {
             // Arrange
-            _dbContext.OrderItems.RemoveRange(_dbContext.OrderItems);
-            _dbContext.Orders.RemoveRange(_dbContext.Orders);
-            _dbContext.Users.RemoveRange(_dbContext.Users);
             var user = new User { FirstName = "LoginTest", Email = "login@test.com", Password = "SecretPassword" };
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
@@ -93,13 +89,11 @@ namespace TestProject
             Assert.NotNull(result);
             Assert.Equal("LoginTest", result.FirstName);
         }
+
         [Fact]
         public async Task UpdateUser_ActuallyPersistsChangesInDatabase()
         {
             // Arrange
-            _dbContext.Users.RemoveRange(_dbContext.Users);
-            await _dbContext.SaveChangesAsync();
-
             var user = new User { FirstName = "Before", Email = "before@test.com", Password = "123" };
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
@@ -125,31 +119,28 @@ namespace TestProject
             Assert.Equal("After", updatedUser.FirstName);
             Assert.Equal("after@test.com", updatedUser.Email);
         }
+
         [Fact]
         public async Task UserWithSameEmail_CorrectlyIdentifiesDuplicates()
         {
             // Arrange
-            _dbContext.Users.RemoveRange(_dbContext.Users);
             var existingUser = new User { FirstName = "Existing", Email = "taken@test.com", Password = "123" };
             await _dbContext.Users.AddAsync(existingUser);
             await _dbContext.SaveChangesAsync();
 
             // Act
             var isAvailableForNew = await _userRepository.UserWithSameEmail("taken@test.com", -1);
-
             var isAvailableForSelf = await _userRepository.UserWithSameEmail("taken@test.com", existingUser.Id);
 
             // Assert
             Assert.False(isAvailableForNew);
-            Assert.True(isAvailableForSelf); 
+            Assert.True(isAvailableForSelf);
         }
+
         [Fact]
         public async Task AddUser_SavesUserCorrectly_AndGeneratesId()
         {
             // Arrange
-            _dbContext.Users.RemoveRange(_dbContext.Users);
-            await _dbContext.SaveChangesAsync();
-
             var newUser = new User
             {
                 FirstName = "New",
@@ -162,13 +153,12 @@ namespace TestProject
             var result = await _userRepository.AddUser(newUser);
 
             // Assert
-            Assert.NotEqual(0, result.Id); 
+            Assert.NotEqual(0, result.Id);
             Assert.Equal("New", result.FirstName);
 
             var userInDb = await _dbContext.Users.FindAsync(result.Id);
             Assert.NotNull(userInDb);
             Assert.Equal("new@test.com", userInDb.Email);
         }
-
     }
 }
