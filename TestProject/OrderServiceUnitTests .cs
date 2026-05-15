@@ -1,7 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DTOs;
 using Entities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using Moq.EntityFrameworkCore;
 using Repositories;
@@ -42,8 +43,10 @@ namespace TestProject
 
             mockOrderRepo.Setup(x => x.AddOrder(It.IsAny<Order>())).ReturnsAsync(orderEntity);
             var mockLogger = new Mock<ILogger<OrderService>>();
+            var mockKafkaProducer = new Mock<IKafkaProducerService>();
+            var mockConfig = new Mock<IConfiguration>();
 
-            var service = new OrderService(mockOrderRepo.Object,mockProductRepo.Object,mockMapper.Object,mockLogger.Object);
+            var service = new OrderService(mockOrderRepo.Object,mockProductRepo.Object,mockMapper.Object,mockLogger.Object, mockKafkaProducer.Object, mockConfig.Object);
             // Act
             var result = await service.AddOrder(orderDto);
 
@@ -78,8 +81,10 @@ namespace TestProject
 
             mockProductRepo.Setup(x => x.GetProductById(1)).ReturnsAsync(product);
             var mockLogger = new Mock<ILogger<OrderService>>();
+            var mockKafkaProducer = new Mock<IKafkaProducerService>();
+            var mockConfig = new Mock<IConfiguration>();
 
-            var service = new OrderService(mockOrderRepo.Object, mockProductRepo.Object, mockMapper.Object, mockLogger.Object);
+            var service = new OrderService(mockOrderRepo.Object, mockProductRepo.Object, mockMapper.Object, mockLogger.Object, mockKafkaProducer.Object, mockConfig.Object);
 
             // Act
             var result = await service.AddOrder(orderDto);
