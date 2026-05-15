@@ -73,24 +73,8 @@ builder.Services.AddAuthentication("Bearer")
 builder.Host.UseNLog();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-
 // Add rate limiting
-builder.Services.AddRateLimiter(options =>
-{
-    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-
-    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
-        RateLimitPartition.GetSlidingWindowLimiter(
-            partitionKey: context.Connection.RemoteIpAddress?.ToString() ?? "global",
-            factory: _ => new SlidingWindowRateLimiterOptions
-            {
-                PermitLimit = 2,
-                Window = TimeSpan.FromSeconds(1),
-                SegmentsPerWindow = 4,
-                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                QueueLimit = 0
-            }));
-});
+builder.Services.AddAppRateLimiting();
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
