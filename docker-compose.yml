@@ -35,6 +35,7 @@ services:
       redis:
         condition: service_started
     environment:
+      - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=ApiDB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
       - ConnectionStrings__Redis=redis:6379,password=atara57769
       - Jwt__Key=${Jwt__Key}
