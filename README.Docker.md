@@ -1,5 +1,11 @@
 ### Building and running your application
 
+Before running the application, make sure you have a `.env` file in the root directory containing the required environment variables:
+
+```env
+Jwt__Key=your_very_long_secret_key_here
+```
+
 When you're ready, start your application by running:
 `docker compose up --build`.
 
