@@ -67,19 +67,10 @@ namespace Services
         }
         public async Task<ProductDTO> GetProductById(int id)
         {
-            int version = await GetCacheVersion();
-            string cacheKey = $"product_v{version}_{id}";
-
-            var cached = await TryGetFromCache<ProductDTO>(cacheKey);
-            if (cached != null) return cached;
-
             var product = await _productRepository.GetProductById(id);
             if (product == null) return null;
 
-            var productDto = _mapper.Map<Product, ProductDTO>(product);
-            await TrySetCache(cacheKey, productDto);
-
-            return productDto;
+            return _mapper.Map<Product, ProductDTO>(product);
         }
 
         public async Task<ProductDTO> AddProduct(PostProductDTO product)
