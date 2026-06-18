@@ -1,9 +1,9 @@
 ### Building and running your application
 
-Before running the application, make sure you have a `.env` file in the root directory containing the required environment variables:
+Before running the application, make sure you have a `.env` file in the root directory. You can copy the template `.env.example` file and configure it as needed:
 
-```env
-Jwt__Key=your_very_long_secret_key_here
+```bash
+cp .env.example .env
 ```
 
 When you're ready, start your application by running:
