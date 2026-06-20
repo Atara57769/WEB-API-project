@@ -39,6 +39,8 @@ services:
       - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=ApiDB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True
       - ConnectionStrings__Redis=redis:6379,password=${REDIS_PASSWORD}
       - Jwt__Key=${Jwt__Key}
+      - Jwt__Issuer=${Jwt__Issuer}
+      - Jwt__Audience=${Jwt__Audience}
 
   kafka:
     image: apache/kafka:latest
