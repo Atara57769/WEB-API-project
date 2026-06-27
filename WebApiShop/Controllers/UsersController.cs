@@ -1,8 +1,9 @@
-﻿using DTOs;
+using DTOs;
 using Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using System.Security.Claims;
 
 namespace WebApiShop.Controllers
 {
@@ -30,9 +31,16 @@ namespace WebApiShop.Controllers
         }
 
         // GET api/<UsersController>/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> Get(int id)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? User.FindFirst("sub")?.Value;
+            if (userIdClaim == null || userIdClaim != id.ToString())
+            {
+                return Forbid();
+            }
+
             UserDTO user = await _userService.GetUserById(id);
             if (user == null)
                 return NotFound();
