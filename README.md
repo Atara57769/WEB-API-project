@@ -36,7 +36,7 @@ All database operations are performed **asynchronously** (`async/await`), freein
 - Mapping between entities and DTOs is handled automatically using **AutoMapper**.
 
 ### ⚙️ Configuration Management
-Application settings (connection strings, feature flags, etc.) are stored externally in `appsettings.json` , keeping configuration separate from code.
+Application configuration is managed via `appsettings.json`. For local development, sensitive values (such as database/Redis connection strings and JWT signing keys) are stored securely using **dotnet user-secrets** to prevent credentials from being committed to version control.
 
 ### 📋 Logging with NLog
 The project makes extensive use of **NLog** for structured logging across all layers, providing detailed insight into application behavior and flow.
@@ -69,13 +69,13 @@ The project includes a comprehensive test suite powered by **xUnit**, covering t
 ## 📁 Project Structure
 
 ```
-├── API/                  # Entry point, controllers, middleware
+├── WebApiShop/           # Entry point, controllers, middleware, rate-limiting
+├── OrderConsumer/        # Background service/consumer for Kafka order topic
 ├── Services/             # Business logic implementations
 ├── Repositories/         # Data access implementations
-├── Entities/             # domain models
+├── Entities/             # Domain models
 ├── DTOs/                 # Record-based data transfer objects
-├── Tests/                # xUnit test projects
-└── appsettings.json      # External configuration
+├── TestProject/          # xUnit unit and integration tests
 ```
 
 ---
@@ -84,7 +84,27 @@ The project includes a comprehensive test suite powered by **xUnit**, covering t
 
 ### Prerequisites
 - [.NET 9 SDK](https://dotnet.microsoft.com/download)
-- A supported database (SQL Server / PostgreSQL / etc.)
+- Local SQL Server instance (or Docker SQL Server container)
+- Redis instance (optional, for caching)
+- Kafka broker (optional, for messaging)
+
+### Configuration (User Secrets)
+To run the project locally, set up the database, Redis, and JWT keys in the dotnet user secrets store:
+
+```bash
+cd WebApiShop
+
+# Set SQL Server connection string
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=ApiDB;User Id=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+
+# Set Redis connection string
+dotnet user-secrets set "ConnectionStrings:Redis" "localhost:6379,password=YOUR_REDIS_PASSWORD"
+
+# Set JWT credentials
+dotnet user-secrets set "Jwt:Key" "your_super_secret_jwt_key_here_must_be_long_enough"
+dotnet user-secrets set "Jwt:Issuer" "http://localhost:5267"
+dotnet user-secrets set "Jwt:Audience" "http://localhost:5267"
+```
 
 ### Run the API
 
@@ -92,11 +112,8 @@ The project includes a comprehensive test suite powered by **xUnit**, covering t
 # Restore dependencies
 dotnet restore
 
-# Apply migrations
-dotnet ef database update
-
 # Run the project
-dotnet run --project API
+dotnet run --project WebApiShop
 ```
 
 ### Run Tests
