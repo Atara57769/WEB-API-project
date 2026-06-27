@@ -8,6 +8,7 @@ namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
@@ -19,6 +20,7 @@ namespace WebApiShop.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<PageResponseDTO<ProductDTO>>> Get([FromQuery] int?[] categoryIds, string? description, int? maxPrice, int? minPrice, int position = 1, int skip = 8)
         {
             var pageResponse = await _productService.GetProducts(
@@ -31,6 +33,7 @@ namespace WebApiShop.Controllers
 
 
         [HttpGet("{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ProductDTO>> Get(int id)
         {
             var product = await _productService.GetProductById(id);

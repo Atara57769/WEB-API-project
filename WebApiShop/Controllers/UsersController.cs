@@ -9,6 +9,7 @@ namespace WebApiShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -49,6 +50,7 @@ namespace WebApiShop.Controllers
 
         // POST api/<UsersController>
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDTO>> Post([FromBody] PostUserDTO newUser)
         {
             if (!await _userService.UserWithSameEmail(newUser.Email))
@@ -74,6 +76,7 @@ namespace WebApiShop.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<UserDTO>> Login([FromBody] LoginUserDTO loginUser)
         {
             var result = await _userService.Login(loginUser);
