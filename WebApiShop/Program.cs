@@ -78,6 +78,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddAppRateLimiting();
 
 var app = builder.Build();
+
+app.UseContentSecurityPolicy();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
